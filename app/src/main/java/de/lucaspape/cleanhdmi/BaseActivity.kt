@@ -52,7 +52,12 @@ open class BaseActivity : Activity(),
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        val scancode = event.scanCode
+
+
         return when (event.scanCode) {
+            610 -> onDigitalZoomIncrease()
+            611 -> onDigitalZoomDecrease()
             ScalarInput.ISV_KEY_UP -> onUpKeyDown()
             ScalarInput.ISV_KEY_DOWN -> onDownKeyDown()
             ScalarInput.ISV_KEY_LEFT -> onLeftKeyDown()
@@ -103,6 +108,14 @@ open class BaseActivity : Activity(),
             ScalarInput.ISV_KEY_MODE_DIAL -> true
             else -> super.onKeyUp(keyCode, event)
         }
+    }
+
+    protected open fun onDigitalZoomIncrease():Boolean{
+        return true
+    }
+
+    protected open fun onDigitalZoomDecrease():Boolean{
+        return true
     }
 
     protected open fun getDialStatus(key: Int): Int {
@@ -256,7 +269,7 @@ open class BaseActivity : Activity(),
     }
 
     protected open fun setColorDepth(highQuality: Boolean) {
-        displayManager!!.setColorDepth(if (highQuality) DisplayManager.ColorDepth.HIGH else DisplayManager.ColorDepth.LOW)
+        displayManager?.setColorDepth(if (highQuality) DisplayManager.ColorDepth.HIGH else DisplayManager.ColorDepth.LOW)
     }
 
     protected open fun notifyAppInfo() {

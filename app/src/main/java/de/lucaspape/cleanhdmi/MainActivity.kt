@@ -1,6 +1,8 @@
 package de.lucaspape.cleanhdmi
 
+import android.hardware.Camera
 import android.os.Bundle
+import android.util.Pair
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.sony.scalar.hardware.CameraEx
@@ -42,11 +44,7 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
         autoReviewControl = AutoPictureReviewControl()
         camera?.setAutoPictureReviewControl(autoReviewControl)
 
-        val params = camera?.normalCamera?.parameters
-        val modifier = camera?.createParametersModifier(params)
-
-        modifier?.driveMode = CameraEx.ParametersModifier.DRIVE_MODE_SINGLE
-        modifier?.autoExposureLock = CameraEx.ParametersModifier.AE_LOCK_SPOT
+        setSceneMode(CameraEx.ParametersModifier.SCENE_MODE_AUTO_WO_SR)
 
         sonyDisplayManager?.let {
             display = Display(it)
@@ -55,6 +53,14 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
         }
 
         surfaceHolder?.addCallback(this)
+    }
+
+    private fun setSceneMode(mode: String) {
+        camera?.let {
+            val params: Camera.Parameters = it.createEmptyParameters()
+            params.sceneMode = mode
+            camera?.normalCamera?.parameters = params
+        }
     }
 
     override fun onPause() {
@@ -108,11 +114,40 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
         return true
     }
 
-    override fun setColorDepth(highQuality: Boolean) {
-        super.setColorDepth(false)
+    override fun onRightKeyDown(): Boolean {
+        camera?.incrementAperture()
+        return true
     }
 
-    override fun onMenuKeyDown():Boolean{
-        exitProcess(0)
+    override fun onLeftKeyDown(): Boolean {
+        camera?.decrementAperture()
+        return true
+    }
+
+    private var iso = 0
+        set(value) {
+            camera?.let {
+                val params = it.createEmptyParameters()
+                it.createParametersModifier(params).isoSensitivity = iso
+                camera?.normalCamera?.parameters = params
+            }
+            field = value
+        }
+
+    override fun onUpperDialChanged(value: Int): Boolean {
+        if(value > 0){
+                iso+=100
+        }else{
+            if(iso >= 100) {
+                iso -= 100
+            }
+
+        }
+
+        return true
+    }
+
+    override fun setColorDepth(highQuality: Boolean) {
+        super.setColorDepth(true)
     }
 }
