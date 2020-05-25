@@ -88,12 +88,12 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
     }
 
     override fun onDownKeyDown(): Boolean {
-        camera?.decrementShutterSpeed()
+        camera?.incrementShutterSpeed()
         return true
     }
 
     override fun onUpKeyDown(): Boolean {
-        camera?.incrementShutterSpeed()
+        camera?.decrementShutterSpeed()
 
         return true
     }
