@@ -3,7 +3,6 @@ package de.lucaspape.cleanhdmi
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.github.ma1co.openmemories.framework.DisplayManager
 import com.sony.scalar.hardware.CameraEx
 import com.sony.scalar.hardware.CameraEx.AutoPictureReviewControl
 import de.lucaspape.cleanhdmi.Logger.error
@@ -85,6 +84,17 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
 
     override fun onFocusKeyUp():Boolean{
         camera?.normalCamera?.cancelAutoFocus()
+        return true
+    }
+
+    override fun onDownKeyDown(): Boolean {
+        camera?.decrementShutterSpeed()
+        return true
+    }
+
+    override fun onUpKeyDown(): Boolean {
+        camera?.incrementShutterSpeed()
+
         return true
     }
 
