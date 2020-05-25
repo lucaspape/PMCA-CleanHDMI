@@ -50,7 +50,6 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
     override fun surfaceCreated(holder: SurfaceHolder?) {
         try {
             camera?.normalCamera?.setPreviewDisplay(holder)
-            val formats = camera?.normalCamera?.parameters?.previewFormat
             camera?.normalCamera?.startPreview()
         } catch (e: IOException) {
         }
