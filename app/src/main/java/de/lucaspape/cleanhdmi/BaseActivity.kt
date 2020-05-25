@@ -10,8 +10,8 @@ import com.sony.scalar.sysutil.ScalarInput
 
 open class BaseActivity : Activity(),
     DisplayManager.Listener {
-    private var displayManager: DisplayManager? = null
-        private set
+    var displayManager: DisplayManager? = null
+    var sonyDisplayManager: com.sony.scalar.hardware.avio.DisplayManager? = null
 
     override fun onResume() {
         Logger.info("Resume " + componentName.className)
@@ -20,16 +20,35 @@ open class BaseActivity : Activity(),
 
         displayManager?.addListener(this)
 
+        sonyDisplayManager = com.sony.scalar.hardware.avio.DisplayManager()
+        sonyDisplayManager?.setDisplayStatusListener(object: com.sony.scalar.hardware.avio.DisplayManager.DisplayEventListener{
+            override fun onDeviceStatusChanged(event: Int) {
+                if(event == com.sony.scalar.hardware.avio.DisplayManager.EVENT_SWITCH_DEVICE){
+                    sonyDisplayManager?.activeDevice?.let {
+                        onDisplayChanged()
+                    }
+                }
+            }
+
+        })
+
         setColorDepth(true)
         notifyAppInfo()
+    }
+
+    fun onDisplayChanged() {
+        AppNotificationManager().notify(NOTIFICATION_DISPLAY_CHANGED)
     }
 
     override fun onPause() {
         Logger.info("Pause " + componentName.className)
         super.onPause()
         setColorDepth(false)
-        displayManager!!.release()
+        displayManager?.release()
         displayManager = null
+        sonyDisplayManager?.releaseDisplayStatusListener()
+        sonyDisplayManager?.finish()
+        sonyDisplayManager = null
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

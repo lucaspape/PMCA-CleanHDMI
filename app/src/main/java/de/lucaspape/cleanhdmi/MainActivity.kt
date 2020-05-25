@@ -3,7 +3,9 @@ package de.lucaspape.cleanhdmi
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.github.ma1co.openmemories.framework.DisplayManager
 import com.sony.scalar.hardware.CameraEx
+import com.sony.scalar.hardware.CameraEx.AutoPictureReviewControl
 import de.lucaspape.cleanhdmi.Logger.error
 import java.io.IOException
 import java.io.PrintWriter
@@ -13,6 +15,8 @@ import kotlin.system.exitProcess
 class MainActivity: BaseActivity(), SurfaceHolder.Callback{
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: CameraEx? = null
+    private var autoReviewControl: AutoPictureReviewControl? = null
+    private var display:Display? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +40,27 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
     override fun onResume() {
         super.onResume()
         camera = CameraEx.open(0, null)
+        autoReviewControl = AutoPictureReviewControl()
+        camera?.setAutoPictureReviewControl(autoReviewControl)
+
+        val params = camera?.normalCamera?.parameters
+        val modifier = camera?.createParametersModifier(params)
+
+        modifier?.driveMode = CameraEx.ParametersModifier.DRIVE_MODE_SINGLE
+        modifier?.autoExposureLock = CameraEx.ParametersModifier.AE_LOCK_SPOT
+
+        sonyDisplayManager?.let {
+            display = Display(it)
+            display?.on()
+            display?.turnAutoOff(Display.NO_AUTO_OFF)
+        }
 
         surfaceHolder?.addCallback(this)
     }
 
     override fun onPause() {
         super.onPause()
+        autoReviewControl = null
         camera?.release()
         camera = null
         surfaceHolder?.removeCallback(this)
