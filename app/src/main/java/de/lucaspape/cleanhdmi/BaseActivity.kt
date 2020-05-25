@@ -10,7 +10,7 @@ import com.sony.scalar.sysutil.ScalarInput
 
 open class BaseActivity : Activity(),
     DisplayManager.Listener {
-    var displayManager: DisplayManager? = null
+    private var displayManager: DisplayManager? = null
         private set
 
     override fun onResume() {
@@ -86,63 +86,63 @@ open class BaseActivity : Activity(),
         }
     }
 
-    protected fun getDialStatus(key: Int): Int {
+    protected open fun getDialStatus(key: Int): Int {
         return ScalarInput.getKeyStatus(key).status
     }
 
-    protected fun onUpKeyDown(): Boolean {
+    protected open fun onUpKeyDown(): Boolean {
         return false
     }
 
-    protected fun onUpKeyUp(): Boolean {
+    protected open fun onUpKeyUp(): Boolean {
         return false
     }
 
-    protected fun onDownKeyDown(): Boolean {
+    protected open fun onDownKeyDown(): Boolean {
         return false
     }
 
-    protected fun onDownKeyUp(): Boolean {
+    protected open fun onDownKeyUp(): Boolean {
         return false
     }
 
-    protected fun onLeftKeyDown(): Boolean {
+    protected open fun onLeftKeyDown(): Boolean {
         return false
     }
 
-    protected fun onLeftKeyUp(): Boolean {
+    protected open fun onLeftKeyUp(): Boolean {
         return false
     }
 
-    protected fun onRightKeyDown(): Boolean {
+    protected open fun onRightKeyDown(): Boolean {
         return false
     }
 
-    protected fun onRightKeyUp(): Boolean {
+    protected open fun onRightKeyUp(): Boolean {
         return false
     }
 
-    protected fun onEnterKeyDown(): Boolean {
+    protected open fun onEnterKeyDown(): Boolean {
         return false
     }
 
-    protected fun onEnterKeyUp(): Boolean {
+    protected open fun onEnterKeyUp(): Boolean {
         return false
     }
 
-    protected fun onFnKeyDown(): Boolean {
+    protected open fun onFnKeyDown(): Boolean {
         return false
     }
 
-    protected fun onFnKeyUp(): Boolean {
+    protected open fun onFnKeyUp(): Boolean {
         return false
     }
 
-    protected fun onAelKeyDown(): Boolean {
+    protected open fun onAelKeyDown(): Boolean {
         return false
     }
 
-    protected fun onAelKeyUp(): Boolean {
+    protected open fun onAelKeyUp(): Boolean {
         return false
     }
 
@@ -150,7 +150,7 @@ open class BaseActivity : Activity(),
         return false
     }
 
-    protected fun onMenuKeyUp(): Boolean {
+    protected open fun onMenuKeyUp(): Boolean {
         return false
     }
 
@@ -170,55 +170,55 @@ open class BaseActivity : Activity(),
         return false
     }
 
-    protected fun onPlayKeyDown(): Boolean {
+    protected open fun onPlayKeyDown(): Boolean {
         return false
     }
 
-    protected fun onPlayKeyUp(): Boolean {
+    protected open fun onPlayKeyUp(): Boolean {
         return false
     }
 
-    protected fun onMovieKeyDown(): Boolean {
+    protected open fun onMovieKeyDown(): Boolean {
         return false
     }
 
-    protected fun onMovieKeyUp(): Boolean {
+    protected open fun onMovieKeyUp(): Boolean {
         return false
     }
 
-    protected fun onC1KeyDown(): Boolean {
+    protected open fun onC1KeyDown(): Boolean {
         return false
     }
 
-    protected fun onC1KeyUp(): Boolean {
+    protected open fun onC1KeyUp(): Boolean {
         return false
     }
 
-    protected fun onLensAttached(): Boolean {
+    protected open fun onLensAttached(): Boolean {
         return false
     }
 
-    protected fun onLensDetached(): Boolean {
+    protected open fun onLensDetached(): Boolean {
         return false
     }
 
-    protected fun onUpperDialChanged(value: Int): Boolean {
+    protected open fun onUpperDialChanged(value: Int): Boolean {
         return false
     }
 
-    protected fun onLowerDialChanged(value: Int): Boolean {
+    protected open fun onLowerDialChanged(value: Int): Boolean {
         return false
     }
 
-    protected fun onModeDialChanged(value: Int): Boolean {
+    protected open fun onModeDialChanged(value: Int): Boolean {
         return false
     }
 
-    protected fun onDeleteKeyDown(): Boolean {
+    protected open fun onDeleteKeyDown(): Boolean {
         return true
     }
 
-    protected fun onDeleteKeyUp(): Boolean {
+    protected open fun onDeleteKeyUp(): Boolean {
         onBackPressed()
         return true
     }
@@ -240,7 +240,7 @@ open class BaseActivity : Activity(),
         displayManager!!.setColorDepth(if (highQuality) DisplayManager.ColorDepth.HIGH else DisplayManager.ColorDepth.LOW)
     }
 
-    protected fun notifyAppInfo() {
+    protected open fun notifyAppInfo() {
         val intent = Intent("com.android.server.DAConnectionManagerService.AppInfoReceive")
         intent.putExtra("package_name", componentName.packageName)
         intent.putExtra("class_name", componentName.className)

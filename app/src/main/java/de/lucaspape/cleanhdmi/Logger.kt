@@ -7,13 +7,13 @@ import java.io.FileWriter
 import java.io.IOException
 
 object Logger {
-    val file: File
+    private val file: File
         get() = File(
             Environment.getExternalStorageDirectory(),
             "PMCADEMO/LOG.TXT"
         )
 
-    internal fun log(msg: String?) {
+    private fun log(msg: String?) {
         try {
             file.parentFile.mkdirs()
             val writer =
@@ -25,7 +25,7 @@ object Logger {
         }
     }
 
-    internal fun log(type: String, msg: String) {
+    private fun log(type: String, msg: String) {
         log("[$type] $msg")
     }
 

@@ -23,8 +23,4 @@ class AppNotificationManager {
     fun removeListener(listener: NotificationListener) {
         listeners.remove(listener)
     }
-
-    companion object {
-        val instance = AppNotificationManager()
-    }
 }
