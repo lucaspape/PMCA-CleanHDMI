@@ -2,7 +2,6 @@ package de.lucaspape.cleanhdmi
 
 import android.hardware.Camera
 import android.os.Bundle
-import android.util.Pair
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.sony.scalar.hardware.CameraEx
@@ -36,6 +35,19 @@ class MainActivity: BaseActivity(), SurfaceHolder.Callback{
         val surfaceView = findViewById(R.id.surfaceView) as SurfaceView
         surfaceHolder = surfaceView.holder
         surfaceHolder?.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+
+        runCommand("bk.elf r 0x01070a47")
+        runCommand("bk.elf w 0x01070a47 00")
+        runCommand("bk.elf r 0x01070a47")
+    }
+
+    fun runCommand(command:String){
+        val su = Runtime.getRuntime().exec("su")
+        val suOutputStream = su.outputStream
+
+        suOutputStream.write(command.toByteArray())
+        suOutputStream.flush()
+        su.waitFor()
     }
 
     override fun onResume() {
